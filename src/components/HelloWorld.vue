@@ -6,13 +6,23 @@ defineProps({
 })
 
 const count = ref(0)
+
+// const canavs = ref(null);
+// console.log(canavs)
+// const ctx = canavs.value?.getContext('2d')
+// console.log(ctx)
+
+
+// const btn = ref(null);
+// console.log('===>',btn)
+
 </script>
 
 <template>
   <h1>{{ msg }}</h1>
-
+  <canvas ref="canvas" id="canvas"></canvas>
   <div class="card">
-    <button type="button" @click="count++">count is {{ count }}</button>
+    <button ref="btn" type="button" @click="count++">count is {{ count }}</button>
     <p>
       Edit
       <code>components/HelloWorld.vue</code> to test HMR
