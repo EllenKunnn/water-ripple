@@ -1,32 +1,43 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import WaterTextureVue from './components/WaterTexture.vue'
-</script>
-
 <template>
-  <WaterTextureVue></WaterTextureVue>
   <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+    <WaterTexture ref="waterTexture" :debug="true" />
   </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
+<script setup>
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+import WaterTexture from './components/WaterTexture.vue';
+
+
+// 1. 监听鼠标移动捕获为数组points[]中的一个新波纹
+onMounted(() => {
+  window.addEventListener('mousemove', onMouseMove);
+  tick();
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('mousemove', onMouseMove);
+});
+
+const waterTexture = ref(null);
+
+const onMouseMove = (event) => {
+  const point = {
+    x: event.clientX / window.innerWidth,
+    y: event.clientY / window.innerHeight,
+  };
+  if (waterTexture.value) {
+    waterTexture.value.addPoint(point);
+  }
+};
+
+// 
+const tick = () => {
+  if (waterTexture.value) {
+    waterTexture.value.update();
+  }
+  requestAnimationFrame(tick);
+};
+
+
+</script>
